@@ -1,6 +1,28 @@
 use std::f64;
 use wasm_bindgen::prelude::*;
 use wasm_bindgen::JsCast;
+use web_sys::console::log_1;
+
+#[wasm_bindgen]
+extern "C" {
+    pub fn alert(s: &str);
+}
+
+#[wasm_bindgen]
+pub fn console_log(s: &str) {
+    #[allow(unused_unsafe)]
+    unsafe {
+        log_1(&JsValue::from(String::from(s)));
+    }
+}
+
+#[wasm_bindgen]
+pub fn greet(name: &str) {
+    #[allow(unused_unsafe)]
+    unsafe {
+        alert(&format!("Hello, {}!", name));
+    }
+}
 
 #[wasm_bindgen(start)]
 pub fn start() {
