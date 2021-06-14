@@ -1,11 +1,18 @@
+use js_sys::Promise;
 use std::f64;
 use wasm_bindgen::prelude::*;
 use wasm_bindgen::JsCast;
+use wasm_bindgen_futures::JsFuture;
 use web_sys::console::log_1;
 
 #[wasm_bindgen]
 extern "C" {
     pub fn alert(s: &str);
+}
+
+#[wasm_bindgen]
+extern "C" {
+    fn sleep(ms: f64) -> Promise;
 }
 
 #[wasm_bindgen]
@@ -22,6 +29,18 @@ pub fn greet(name: &str) {
     unsafe {
         alert(&format!("Hello, {}!", name));
     }
+}
+
+#[wasm_bindgen]
+pub async fn timer(count: u32) -> Result<JsValue, JsValue> {
+    for i in 1..count {
+        unsafe {
+            JsFuture::from(sleep(1000f64)).await?;
+        }
+        console_log(&i.to_string());
+    }
+
+    Ok(JsValue::undefined())
 }
 
 #[wasm_bindgen(start)]
